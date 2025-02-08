@@ -1,13 +1,21 @@
 package io.mesoneer.interview_challenges;
 
-public class Range {
-
+public final class Range {
+  private final int lower;
+  private final int upper;
   /**
    * Constructor is private BY DESIGN.
    *
    * TODO: Change the constructor to meet your requirements.
    */
-  private Range() {
+  private Range(int lowerbound, int upperbound) {
+
+    if(lowerbound > upperbound){
+      throw new IllegalArgumentException();
+    }
+
+    this.lower = lowerbound;
+    this.upper = upperbound;
   }
 
   /**
@@ -15,7 +23,7 @@ public class Range {
    */
   public static Range of(int lowerbound, int upperbound) {
     // TODO: Implement here!
-    throw new RuntimeException("not implemented yet");
+    return new Range(lowerbound, upperbound);
   }
 
   /**
@@ -24,7 +32,7 @@ public class Range {
    */
   public boolean contains(int value) {
     // TODO: Implement here!
-    throw new RuntimeException("not implemented yet");
+    return value >= this.lower && value <= this.upper;
   }
 
   /**
@@ -32,7 +40,7 @@ public class Range {
    */
   public int lowerbound() {
     // TODO: Implement here!
-    throw new RuntimeException("not implemented yet");
+    return this.lower;
   }
 
   /**
@@ -40,7 +48,7 @@ public class Range {
    */
   public int upperbound() {
     // TODO: Implement here!
-    throw new RuntimeException("not implemented yet");
+    return this.upper;
   }
 
 }

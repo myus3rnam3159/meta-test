@@ -1,5 +1,6 @@
 package io.mesoneer.interview_challenges;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.*;
 
@@ -46,5 +47,26 @@ public class RangeTest {
 
     assertThat(range1.contains(10)).isEqualTo( true);
     assertThat(range2.contains(10)).isEqualTo( false);
+  }
+
+  @Test
+  public void isImmutable() throws Exception {
+
+    // Test that fields are final and cannot be modified via reflection
+    Range range = Range.of(5, 10);
+
+    int checksum = range.hashCode();
+    String seri = range.toString();
+
+    range.lowerbound();
+    range.upperbound();
+    range.contains(7);
+
+    assertEquals(checksum, range.hashCode());
+    assertEquals(seri, range.toString());
+
+    assertEquals(5, range.lowerbound());
+    assertEquals(10, range.upperbound());
+
   }
 }
