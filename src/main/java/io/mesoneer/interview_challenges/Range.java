@@ -1,6 +1,10 @@
 package io.mesoneer.interview_challenges;
 
-public final class Range {
+import io.mesoneer.interview_challenges.level2.ClosedOpenRange;
+import io.mesoneer.interview_challenges.level2.OpenClosedRange;
+import io.mesoneer.interview_challenges.level2.OpenRange;
+
+public class Range {
   private final int lower;
   private final int upper;
   /**
@@ -8,7 +12,8 @@ public final class Range {
    *
    * TODO: Change the constructor to meet your requirements.
    */
-  private Range(int lowerbound, int upperbound) {
+
+  protected Range(int lowerbound, int upperbound) {
 
     if(lowerbound > upperbound){
       throw new IllegalArgumentException();
@@ -49,6 +54,18 @@ public final class Range {
   public int upperbound() {
     // TODO: Implement here!
     return this.upper;
+  }
+
+  public static OpenRange open(int lwr, int up){
+    return new OpenRange(lwr, up);
+  }
+
+  public static OpenClosedRange openClosed(int lwr, int up){
+    return new OpenClosedRange(lwr, up);
+  }
+
+  public static ClosedOpenRange closedOpen(int lwr, int up){
+    return new ClosedOpenRange(lwr, up);
   }
 
 }

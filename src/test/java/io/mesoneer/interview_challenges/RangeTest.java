@@ -53,7 +53,7 @@ public class RangeTest {
   public void isImmutable() throws Exception {
 
     // Test that fields are final and cannot be modified via reflection
-    Range range = Range.of(5, 10);
+    final Range range = Range.of(5, 10);
 
     int checksum = range.hashCode();
     String seri = range.toString();
@@ -68,5 +68,28 @@ public class RangeTest {
     assertEquals(5, range.lowerbound());
     assertEquals(10, range.upperbound());
 
+  }
+
+  @Test
+  public void isOpenRange() {
+
+    Range open = Range.open(5, 7);
+    assertEquals(open.contains(5), false);
+  }
+
+  @Test
+  public void isOpenClosedRange() {
+
+    Range open = Range.openClosed(5, 7);
+    assertEquals(open.contains(5), false);
+    assertEquals(open.contains(7), true);
+  }
+
+  @Test 
+  public void isClosedOpenRange() {
+
+    Range open = Range.closedOpen(5, 7);
+    assertEquals(open.contains(5), true);
+    assertEquals(open.contains(7), false);
   }
 }
