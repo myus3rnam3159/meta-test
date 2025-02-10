@@ -20,4 +20,29 @@ public class LeastMostRange <T extends Comparable<? super T>> extends Range<T> {
 
         return  value.compareTo(this.lowerbnd) >= 0;
     }
+
+    @Override
+    public String toString() {
+
+        if(this.lowerbnd == null && this.upperbnd == null){
+            return "[Infinity, Infinity]";
+        }
+        StringBuilder sb = new StringBuilder();
+
+        if(this.lowerbnd != null && this.upperbnd != null) {
+            sb.append("[").append(this.lowerbnd).append(", ").append(this.upperbnd).append("]");
+
+            return sb.toString();
+        }
+
+        if (this.upperbnd != null) {
+            sb.append("[Infinity, ").append(this.upperbnd).append("]");
+
+            return sb.toString();
+        }
+
+        sb.append("[").append(this.lowerbnd).append(", Infinity]");
+
+        return sb.toString();
+    }
 }

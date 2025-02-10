@@ -39,6 +39,10 @@ public class Range<T extends Comparable<? super T>>{
         return new LeastMostRange<>(null, upper);
     }
 
+    public static <T extends Comparable<? super T>> LeastMostRange<T> closed2(T lower, T upper){
+        return new LeastMostRange<>(lower, upper);
+    }
+
     public static <T extends Comparable<? super T>> LeastMostRange<T> all(){
         return new LeastMostRange<>(null, null);
     }

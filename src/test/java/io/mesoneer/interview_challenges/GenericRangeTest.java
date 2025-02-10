@@ -1,6 +1,8 @@
 package io.mesoneer.interview_challenges;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static java.time.Month.DECEMBER;
+import static java.time.Month.JANUARY;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -25,40 +27,54 @@ public class GenericRangeTest {
     @Test
     public void isOpenEndedRange() {
         Range<Integer> lessThanFive = Range.lessThan(5); // [Infinity, 5)
-        assertEquals(lessThanFive.contains(5), false); // false;
-        assertEquals(lessThanFive.contains(-9000), true); // true;
+        assertFalse(lessThanFive.contains(5)); // false;
+        assertTrue(lessThanFive.contains(-9000)); // true;
     }
 
     @Test
     public void isAtLeastRange() {
 
         Range<Integer> atLeastFive = Range.atLeast(5); // [5, Infinity]
-        assertEquals(atLeastFive.contains(5), true); // true;
-        assertEquals(atLeastFive.contains(4), false); // false;
+        assertTrue(atLeastFive.contains(5)); // true;
+        assertFalse(atLeastFive.contains(4)); // false;
     }
 
     @Test
     public void isAtMostRange() {
 
         Range<Integer> atMostFive = Range.atMost(5); // [Infinity, 5]
-        assertEquals(atMostFive.contains(5), true); // true
-        assertEquals(atMostFive.contains(-234234), true); // true;
-        assertEquals(atMostFive.contains(6), false); // false;
+        assertTrue(atMostFive.contains(5)); // true
+        assertTrue(atMostFive.contains(-234234)); // true;
+        assertFalse(atMostFive.contains(6)); // false;
     }
 
     @Test
     public void isAllRange() {
         Range<String> all = Range.all(); // [Infinity, Infinity]
-        assertEquals(all.contains("anything"), true); // true;
-        assertEquals(all.contains(""), true); // true;
-        assertEquals(all.contains(null), true); // true;
+        assertTrue(all.contains("anything")); // true;
+        assertTrue(all.contains("")); // true;
+        assertTrue(all.contains(null)); // true;
     }
 
     @Test
     public void isGreaterRange() {
 
-        Range<LocalDate> afterEpoch = Range.greaterThan(LocalDate.of(1900, Month.JANUARY, 1)); // (1900-01-01, Infinity]
-        assertEquals(afterEpoch.contains(LocalDate.of(2016, Month.JULY, 28)), true); // true;
-        assertEquals(afterEpoch.contains(LocalDate.of(1750, Month.JANUARY, 1)), false); // false;
+        Range<LocalDate> afterEpoch = Range.greaterThan(LocalDate.of(1900, JANUARY, 1)); // (1900-01-01, Infinity]
+        assertTrue(afterEpoch.contains(LocalDate.of(2016, Month.JULY, 28))); // true;
+        assertFalse(afterEpoch.contains(LocalDate.of(1750, JANUARY, 1))); // false;
+    }
+
+    @Test
+    public void isOpenEndedRangeToString() {
+        Range<Integer> lessThen100 = Range.lessThan(100);
+        assertEquals("[Infinity, 100)", lessThen100.toString());
+    }
+
+    @Test
+    public void isLeastMostRangeToString() {
+        Range<LocalDate> within2020 = Range.closed2(
+                LocalDate.of(2020, JANUARY, 1),
+                LocalDate.of(2020, DECEMBER, 31));
+        assertEquals("[2020-01-01, 2020-12-31]", within2020.toString());
     }
 }
