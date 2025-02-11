@@ -77,4 +77,12 @@ public class GenericRangeTest {
                 LocalDate.of(2020, DECEMBER, 31));
         assertEquals("[2020-01-01, 2020-12-31]", within2020.toString());
     }
+
+    @Test
+    public void isRangeParsed() {
+        String rangeString = Range.lessThan(100).toString();
+        Range<Integer> lessThan100 = Range.parse(rangeString, "\\[(.*?),\\s*(.*?)\\)");
+        assertEquals("[Infinity, 100)", lessThan100.toString());
+        assertTrue(lessThan100.contains(99));
+    }
 }

@@ -8,6 +8,10 @@ public class OpenEndedRange<T extends Comparable<? super T>> extends Range<T> {
         super(lower, upper);
     }
 
+    public OpenEndedRange(String lower, String upper) {
+        super((T)lower, (T)Integer.valueOf(upper));
+    }
+
     @Override
     public boolean contains(T value) {
 
