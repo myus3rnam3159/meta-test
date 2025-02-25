@@ -32,7 +32,7 @@ public class Range<T extends Comparable<? super T>> {
     }
 
     public boolean contains(T value) {
-        return false;
+        return this.lowerbnd.compareTo(value) <= 0 && this.upperbnd.compareTo(value) >= 0;
     };
 
     public static <T extends Comparable<? super T>> LeastMostRange<T> atLeast(T lower) {
@@ -65,6 +65,13 @@ public class Range<T extends Comparable<? super T>> {
 
         String lowerStr = m.group(1).trim();
         String upperStr = m.group(2).trim();
+
+        if(!lowerStr.equals(Constants.INFINITY) && !upperStr.equals(Constants.INFINITY)){
+            if(str.contains("[") && str.contains("]")){
+
+                return new Range<T>((T)Integer.valueOf(lowerStr), (T)Integer.valueOf(upperStr));
+            }
+        }
 
         if (lowerStr.equals(Constants.INFINITY))
             return new OpenEndedRange<>(null, upperStr);

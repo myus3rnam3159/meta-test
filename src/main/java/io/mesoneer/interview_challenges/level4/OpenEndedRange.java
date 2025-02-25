@@ -32,11 +32,6 @@ public class OpenEndedRange<T extends Comparable<? super T>> extends Range<T> {
             return "[Infinity, Infinity]";
         }
         
-        // if(this.lowerbnd != null && this.upperbnd != null) {
-        //     sb.append("(").append(this.lowerbnd).append(", ").append(this.upperbnd).append(")");
-
-        //     return sb.toString();
-        // }
 
         if (this.upperbnd != null) {
             sb.append("[Infinity, ").append(this.upperbnd).append(")");
