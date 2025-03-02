@@ -24,9 +24,12 @@ jobs:
         run: chmod +x gradlew
 
       - name: Export certification passphrase and prepare certificate
+        env:
+          SSL_CERT_PW: ${{ secrets.SSL_CERT_PW }}
+          SSL_CERT_BASE64: ${{ secrets.SSL_CERT_BASE64 }}
         run: |
-          echo "SSL_CERT_PW={{ secrets.SSL_CERT_PW }}" >> $GITHUB_ENV
-          echo "{{ secrets.SSL_CERT_BASE64 }}" | base64 -d > certificate.p12
+          echo "SSL_CERT_PW=$SSL_CERT_PW" >> $GITHUB_ENV
+          echo "$SSL_CERT_BASE64" | base64 -d > certificate.p12
           echo "SSL_CERT_BASE64=./certificate.p12" >> $GITHUB_ENV
 
       - name: Build with Gradle
