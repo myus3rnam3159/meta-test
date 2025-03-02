@@ -6,9 +6,15 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
 import java.net.http.HttpRequest.BodyPublishers;
 
 import io.mesoneer.interview_challenges.level7.APIServer;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -22,43 +28,67 @@ import static io.mesoneer.interview_challenges.Constants.HTTP;
 
 public class HttpServerTest {
 
-    private final HttpClient client = HttpClient.newHttpClient();
     private static Thread serverThread;
 
     @BeforeAll
     public static void startServer(){
+
         serverThread = new Thread(
                 () -> {
-                    APIServer.main(new String[]{});
-                }
-        );
+                    APIServer.main(new String[] {});
+                });
         serverThread.setDaemon(true);
         serverThread.start();
     }
 
     @Test
     public void isClosedRangeAPIOk() throws Exception {
+        System.setProperty("jdk.internal.httpclient.disableHostnameVerification", Boolean.TRUE.toString());
 
-        Map<String, Object> body = new HashMap<>();
-        body.put("range", "[0, 100]");
-        body.put("value", 50);
+        TrustManager[] trustAllCerts = new TrustManager[] {
+                new X509TrustManager() {
+                    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                        return null;
+                    }
 
-        ObjectMapper objectMapper = new ObjectMapper();
+                    public void checkClientTrusted(
+                            java.security.cert.X509Certificate[] certs, String authType) {
+                    }
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(HTTP, null, SERVER, PORT, "/range", null, null))
-                .header("Content-Type", "application/json")
-                .POST(BodyPublishers.ofString(objectMapper.writeValueAsString(body)))
-                .build();
+                    public void checkServerTrusted(
+                            java.security.cert.X509Certificate[] certs, String authType) {
+                    }
+                }
+        };
 
-        HttpResponse<String> response = this.client.send(request, HttpResponse.BodyHandlers.ofString());
+        SSLContext sc = SSLContext.getInstance("SSL");
+        sc.init(null, trustAllCerts, new java.security.SecureRandom());
 
+        HttpResponse<String> response;
+        try (HttpClient httpClient = HttpClient.newBuilder()
+                .sslContext(sc)
+                .build()) {
+
+            Map<String, Object> body = new HashMap<>();
+            body.put("range", "[0, 100]");
+            body.put("value", 50);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI(HTTP, null, SERVER, PORT, "/range", null, null))
+                    .header("Content-Type", "application/json")
+                    .POST(BodyPublishers.ofString(objectMapper.writeValueAsString(body)))
+                    .build();
+
+            response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        }
         assertEquals("true", response.body().trim());
     }
 
     @AfterAll
-    public static void stopServer(){
-        if(serverThread.isAlive()){
+    public static void stopServer() {
+        if (serverThread.isAlive()) {
             serverThread.interrupt();
         }
     }
