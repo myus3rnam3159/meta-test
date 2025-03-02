@@ -24,8 +24,6 @@ jobs:
     - name: Export certification passphrase and prepare certificate
       run: |
         export SSL_CERT_PW={{ secrets.SSL_CERT_PW }}
-        echo "{{ secrets.SSL_CERT_BASE64 }}" | base64 -d > certificate.p12
-        export SSL_CERT_BASE64=./certificate.p12
     - name: Export certification
       run:
     - name: Build with Gradle
